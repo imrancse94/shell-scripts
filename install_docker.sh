@@ -44,8 +44,11 @@ remove_docker() {
     rm -rf /var/run/docker.sock
 
     # Remove Docker group and user if they exist
-    groupdel docker
-    userdel -r dockeruser
+    if getent group docker > /dev/null 2>&1; then
+        groupdel docker
+    fi
+    
+    # userdel -r dockeruser // commented by me
 
     # Clean up unused packages
     apt-get autoremove -y
