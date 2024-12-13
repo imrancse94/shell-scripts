@@ -140,47 +140,6 @@ fi
 echo "Verifying Docker installation..."
 docker --version
 
-# Prompt the user for a username to create for Docker usage
-read -p "Enter the username to create for Docker usage: " USER_NAME
-
-# Error handling for empty username
-if [ -z "$USER_NAME" ]; then
-    echo "Error: Username cannot be empty."
-    exit 1
-fi
-
-# Check if the user already exists
-if id "$USER_NAME" &>/dev/null; then
-    echo "Error: User '$USER_NAME' already exists."
-    exit 1
-fi
-
-# Create a new user for Docker (if it doesn't already exist)
-USER_GROUP="docker"
-
-echo "Creating user and group for Docker..."
-
-# Create the group for Docker if it doesn't exist
-groupadd -f $USER_GROUP
-
-# Create the user and add them to the Docker group
-useradd -m -s /bin/bash -G $USER_GROUP $USER_NAME
-
-# Add user to the Docker group for non-root access
-echo "Adding $USER_NAME to the Docker group..."
-usermod -aG docker $USER_NAME
-
 # Output success message
 echo "Docker installation is complete."
 echo "$USER_NAME has been added to the Docker group."
-
-# Configure sudo for passwordless execution of Docker commands
-echo "Configuring passwordless sudo for Docker commands..."
-
-# Allow $USER_NAME to run Docker commands without a password (but still require a password for other sudo commands)
-echo "$USER_NAME ALL=(ALL) NOPASSWD: /usr/bin/docker" >> /etc/sudoers
-
-echo "Passwordless sudo for Docker has been configured."
-
-# Instructions for the user
-echo "Please log out and log back in for the group changes to take effect, or run 'newgrp docker' to apply the group change immediately."
