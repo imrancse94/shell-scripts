@@ -142,4 +142,3 @@ docker --version
 
 # Output success message
 echo "Docker installation is complete."
-echo "$USER_NAME has been added to the Docker group."
