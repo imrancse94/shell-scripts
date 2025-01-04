@@ -1,0 +1,25 @@
+network:
+  version: 2
+  ethernets:
+    enp0s3:
+	dhcp4: true
+    enp0s8:
+      addresses:
+        - 10.0.3.12/24
+      routes:
+        - to: 0.0.0.0/0
+          via: 10.0.3.1
+      nameservers:
+          addresses:
+            - 8.8.8.8
+            - 8.8.4.4
+
+
+
+netplan try && netplan apply
+
+
+sudo cat <<EOF>> /etc/hosts 
+10.0.3.10 kube-master 
+10.0.3.11 kube-worker
+EOF
